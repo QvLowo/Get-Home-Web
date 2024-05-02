@@ -34,12 +34,9 @@ public class HouseController {
     //取得所有房屋資訊
     @GetMapping("/houses")
     public ResponseEntity<List<House>> getAllHouses() {
-        List<House> houses = houseService.getAllHouses();
-        if (houses != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(houses);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        List<House> houseList = houseService.getAllHouses();
+        //根據RESTful設計回傳houseList
+            return ResponseEntity.status(HttpStatus.OK).body(houseList);
     }
 
     //新增房屋
