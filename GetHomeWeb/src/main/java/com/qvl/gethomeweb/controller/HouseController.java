@@ -1,5 +1,9 @@
 package com.qvl.gethomeweb.controller;
 
+import com.qvl.gethomeweb.constant.Gender;
+import com.qvl.gethomeweb.constant.HouseStatus;
+import com.qvl.gethomeweb.constant.HouseType;
+import com.qvl.gethomeweb.dto.HouseQueryParams;
 import com.qvl.gethomeweb.dto.HouseRequest;
 import com.qvl.gethomeweb.model.House;
 import com.qvl.gethomeweb.service.HouseService;
@@ -31,13 +35,25 @@ public class HouseController {
         }
     }
 
-    //取得所有房屋資訊
+    //    查詢全部房子資訊．並加上選填的查詢條件
     @GetMapping("/houses")
-    public ResponseEntity<List<House>> getAllHouses() {
-        List<House> houseList = houseService.getAllHouses();
+    public ResponseEntity<List<House>> getAllHouses(
+            @RequestParam(required = false) HouseType houseType,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) Gender gender,
+            @RequestParam(required = false) HouseStatus status) {
+
+        HouseQueryParams houseQueryParams = new HouseQueryParams();
+        houseQueryParams.setHouseType(houseType);
+        houseQueryParams.setSearch(search);
+        houseQueryParams.setGender(gender);
+        houseQueryParams.setStatus(status);
+
+        List<House> houseList = houseService.getAllHouses(houseQueryParams);
         //根據RESTful設計回傳houseList
-            return ResponseEntity.status(HttpStatus.OK).body(houseList);
+        return ResponseEntity.status(HttpStatus.OK).body(houseList);
     }
+
 
     //新增房屋
     @PostMapping("/houses")

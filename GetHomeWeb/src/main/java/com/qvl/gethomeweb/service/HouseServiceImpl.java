@@ -1,6 +1,7 @@
 package com.qvl.gethomeweb.service;
 
 import com.qvl.gethomeweb.dao.HouseDao;
+import com.qvl.gethomeweb.dto.HouseQueryParams;
 import com.qvl.gethomeweb.dto.HouseRequest;
 import com.qvl.gethomeweb.model.House;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ public class HouseServiceImpl implements HouseService {
     @Autowired
     private HouseDao houseDao;
 
-    //查詢所有房屋資訊
+    //    查詢全部房子資訊．並加上選填的查詢條件
     @Override
     public House getHouseById(Integer houseId) {
         return houseDao.getHouseById(houseId);
@@ -22,8 +23,8 @@ public class HouseServiceImpl implements HouseService {
 
     //查詢所有房屋資訊
     @Override
-    public List<House> getAllHouses() {
-        return houseDao.getAllHouses();
+    public List<House> getAllHouses(HouseQueryParams houseQueryParams) {
+        return houseDao.getAllHouses(houseQueryParams);
     }
 
     //新增房屋資訊

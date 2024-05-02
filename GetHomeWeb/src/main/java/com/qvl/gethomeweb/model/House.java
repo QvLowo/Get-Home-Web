@@ -1,5 +1,7 @@
 package com.qvl.gethomeweb.model;
 
+import com.qvl.gethomeweb.constant.Gender;
+import com.qvl.gethomeweb.constant.HouseStatus;
 import com.qvl.gethomeweb.constant.HouseType;
 import lombok.Data;
 
@@ -15,8 +17,8 @@ public class House {
     private Integer utilities;
     private Integer square;
     private Integer managementCost;
-    private String gender;
-    private String status;
+    private Gender gender;
+    private HouseStatus status;
     private String description;
     private Date createdDate;
     private Date lastUpdateDate;

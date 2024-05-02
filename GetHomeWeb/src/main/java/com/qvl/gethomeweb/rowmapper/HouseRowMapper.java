@@ -1,6 +1,8 @@
 package com.qvl.gethomeweb.rowmapper;
 
 
+import com.qvl.gethomeweb.constant.Gender;
+import com.qvl.gethomeweb.constant.HouseStatus;
 import com.qvl.gethomeweb.constant.HouseType;
 import com.qvl.gethomeweb.model.House;
 import org.springframework.jdbc.core.RowMapper;
@@ -23,8 +25,10 @@ public class HouseRowMapper implements RowMapper<House> {
         house.setUtilities(rs.getInt("utilities"));
         house.setSquare(rs.getInt("square"));
         house.setManagementCost(rs.getInt("management_cost"));
-        house.setGender(rs.getString("gender"));
-        house.setStatus(rs.getString("status"));
+
+        house.setGender(Gender.valueOf(rs.getString("gender")));
+        house.setStatus(HouseStatus.valueOf(rs.getString("status")));
+
         house.setDescription(rs.getString("description"));
         house.setCreatedDate(rs.getDate("created_date"));
         house.setLastUpdateDate(rs.getDate("last_update_date"));

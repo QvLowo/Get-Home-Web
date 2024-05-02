@@ -1,5 +1,7 @@
 package com.qvl.gethomeweb.dto;
 
+import com.qvl.gethomeweb.constant.Gender;
+import com.qvl.gethomeweb.constant.HouseStatus;
 import com.qvl.gethomeweb.constant.HouseType;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -22,9 +24,7 @@ public class HouseRequest {
     private Integer square;
     @NotNull
     private Integer managementCost;
-    @NotNull
-    private String gender;
-    @NotNull
-    private String status;
+    private Gender gender;
+    private HouseStatus status;
     private String description;
 }

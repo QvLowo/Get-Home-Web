@@ -4,5 +4,5 @@ public enum HouseType {
     APARTMENT,
     SHAREROOMS,
     STUDIO,
-    BEDSIT
+    BEDSIT;
 }

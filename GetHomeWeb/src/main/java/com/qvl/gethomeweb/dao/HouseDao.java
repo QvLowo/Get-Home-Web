@@ -1,15 +1,16 @@
 package com.qvl.gethomeweb.dao;
 
+import com.qvl.gethomeweb.dto.HouseQueryParams;
 import com.qvl.gethomeweb.dto.HouseRequest;
 import com.qvl.gethomeweb.model.House;
 
 import java.util.List;
 
 public interface HouseDao {
-    //查詢所有房屋資訊
+
     House getHouseById(Integer houseId);
 
-    List<House> getAllHouses();
+    List<House> getAllHouses(HouseQueryParams houseQueryParams);
 
     Integer createHouse(HouseRequest houseRequest);
 

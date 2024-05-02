@@ -1,6 +1,7 @@
 package com.qvl.gethomeweb.dao.Impl;
 
 import com.qvl.gethomeweb.dao.HouseDao;
+import com.qvl.gethomeweb.dto.HouseQueryParams;
 import com.qvl.gethomeweb.dto.HouseRequest;
 import com.qvl.gethomeweb.model.House;
 import com.qvl.gethomeweb.rowmapper.HouseRowMapper;
@@ -43,18 +44,37 @@ public class HouseDaoImpl implements HouseDao {
     }
 
     @Override
-    //    查詢全部房子資訊
-    public List<House> getAllHouses() {
-        // 設定sql語法透過houseId查詢所有房屋資訊
-        String sql = "SELECT house_id,house_type, address, image_url, price, utilities, square, management_cost, gender, status, description ,created_date,last_update_date from house";
+    //    查詢全部房子資訊．並加上選填的查詢條件
+    public List<House> getAllHouses(HouseQueryParams houseQueryParams) {
+        // 設定sql語法透過houseId查詢所有房屋資訊，加入where 1=1如果查詢條件不存在，使用原本sql語法，若存在則加上條件查詢的sql語法
+        String sql = "SELECT house_id,house_type, address, image_url, price, utilities, " +
+                "square, management_cost, gender, status, description ,created_date,last_update_date" +
+                " FROM house WHERE 1=1";
 
         //創建Map物件，用來存放房屋
         Map<String, Object> map = new HashMap<>();
 
+        if (houseQueryParams.getHouseType() != null) {
+            sql += " AND house_type = :houseType";
+            map.put("houseType", houseQueryParams.getHouseType().name());
+        }
+        if (houseQueryParams.getSearch() != null) {
+            sql += " AND address LIKE :search";
+            map.put("search", "%" + houseQueryParams.getSearch() + "%");
+        }
+
+        if (houseQueryParams.getGender() != null) {
+            sql += " AND gender = :gender";
+            map.put("gender", houseQueryParams.getGender().name());
+        }
+        if (houseQueryParams.getStatus() != null) {
+            sql += " AND status = :status";
+            map.put("status", houseQueryParams.getStatus().name());
+        }
+
         //使用NamedParameterJdbcTemplate查詢一批房屋資訊放到List中
         List<House> houseList = namedParameterJdbcTemplate.query(sql, map, new HouseRowMapper());
-        //回傳第1～Ｎ筆房屋資訊
-            return houseList;
+        return houseList;
 
     }
 
@@ -72,8 +92,8 @@ public class HouseDaoImpl implements HouseDao {
         map.put("utilities", houseRequest.getUtilities());
         map.put("square", houseRequest.getSquare());
         map.put("managementCost", houseRequest.getManagementCost());
-        map.put("gender", houseRequest.getGender());
-        map.put("status", houseRequest.getStatus());
+        map.put("gender", houseRequest.getGender().toString());
+        map.put("status", houseRequest.getStatus().toString());
         map.put("description", houseRequest.getDescription());
 //  創建Date，用來存放創建時間及最後更新時間
         Date now = new Date();
@@ -101,7 +121,7 @@ public class HouseDaoImpl implements HouseDao {
         map.put("utilities", houseRequest.getUtilities());
         map.put("square", houseRequest.getSquare());
         map.put("managementCost", houseRequest.getManagementCost());
-        map.put("gender", houseRequest.getGender());
+        map.put("gender", houseRequest.getGender().toString());
         map.put("status", houseRequest.getStatus());
         map.put("description", houseRequest.getDescription());
 
