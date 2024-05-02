@@ -1,0 +1,127 @@
+package com.qvl.gethomeweb.dao.Impl;
+
+import com.qvl.gethomeweb.dao.HouseDao;
+import com.qvl.gethomeweb.dto.HouseRequest;
+import com.qvl.gethomeweb.model.House;
+import com.qvl.gethomeweb.rowmapper.HouseRowMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Repository
+public class HouseDaoImpl implements HouseDao {
+    @Autowired
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+
+    @Override
+    //    查詢一筆房子資訊
+    public House getHouseById(Integer houseId) {
+        // 設定sql語法透過houseId查詢所有房屋資訊
+        String sql = "SELECT house_id,house_type, address, image_url, price, utilities, square, management_cost, gender, status, description ,created_date,last_update_date from house  where house_id =:houseId";
+
+        //創建Map物件，用來存放房屋
+        Map<String, Object> map = new HashMap<>();
+        map.put("houseId", houseId);
+
+        //使用NamedParameterJdbcTemplate查詢一批房屋資訊放到List中
+        List<House> houseList = namedParameterJdbcTemplate.query(sql, map, new HouseRowMapper());
+        //回傳第1～Ｎ筆房屋資訊
+        if (houseList.size() > 0) {
+            return houseList.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    //    查詢全部房子資訊
+    public List<House> getAllHouses() {
+        // 設定sql語法透過houseId查詢所有房屋資訊
+        String sql = "SELECT house_id,house_type, address, image_url, price, utilities, square, management_cost, gender, status, description ,created_date,last_update_date from house";
+
+        //創建Map物件，用來存放房屋
+        Map<String, Object> map = new HashMap<>();
+
+        //使用NamedParameterJdbcTemplate查詢一批房屋資訊放到List中
+        List<House> houseList = namedParameterJdbcTemplate.query(sql, map, new HouseRowMapper());
+        //回傳第1～Ｎ筆房屋資訊
+        if (houseList.size() > 0) {
+            return houseList;
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+//    建立房屋
+    public Integer createHouse(HouseRequest houseRequest) {
+//      設定sql語法新增房屋資訊
+        String sql = "INSERT INTO House (house_type, address, image_url, price, utilities, square, management_cost, gender, status, description) value(:houseType,:address,:imageUrl,:price,:utilities,:square,:managementCost,:gender,:status,:description)";
+//      創建Map物件，用來存放房屋資訊
+        Map<String, Object> map = new HashMap<>();
+        map.put("houseType", houseRequest.getHouseType().toString());
+        map.put("address", houseRequest.getAddress());
+        map.put("imageUrl", houseRequest.getImageUrl());
+        map.put("price", houseRequest.getPrice());
+        map.put("utilities", houseRequest.getUtilities());
+        map.put("square", houseRequest.getSquare());
+        map.put("managementCost", houseRequest.getManagementCost());
+        map.put("gender", houseRequest.getGender());
+        map.put("status", houseRequest.getStatus());
+        map.put("description", houseRequest.getDescription());
+//  創建Date，用來存放創建時間及最後更新時間
+        Date now = new Date();
+        map.put("createdDate", now);
+        map.put("lastUpdateDate", now);
+//使用KeyHolder取得自動生成的houseId
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        namedParameterJdbcTemplate.update(sql, new MapSqlParameterSource(map), keyHolder);
+        int houseId = keyHolder.getKey().intValue();
+        return houseId;
+    }
+
+    @Override
+//    更新房屋
+    public void updateHouse(Integer houseId, HouseRequest houseRequest) {
+//       設定sql語法更新房屋資訊
+        String sql = "UPDATE House SET house_type = :houseType, address = :address, image_url = :imageUrl, price = :price, utilities = :utilities, square = :square, management_cost = :managementCost, gender = :gender, status = :status, description = :description WHERE house_id = :houseId";
+//       創建Map物件，用來存放房屋資訊
+        Map<String, Object> map = new HashMap<>();
+        map.put("houseId", houseId);
+        map.put("houseType", houseRequest.getHouseType().toString());
+        map.put("address", houseRequest.getAddress());
+        map.put("imageUrl", houseRequest.getImageUrl());
+        map.put("price", houseRequest.getPrice());
+        map.put("utilities", houseRequest.getUtilities());
+        map.put("square", houseRequest.getSquare());
+        map.put("managementCost", houseRequest.getManagementCost());
+        map.put("gender", houseRequest.getGender());
+        map.put("status", houseRequest.getStatus());
+        map.put("description", houseRequest.getDescription());
+
+//        存放最後更新日期到map物件
+        map.put("lastUpdateDate", new Date());
+        namedParameterJdbcTemplate.update(sql, map);
+    }
+
+
+    @Override
+//    透過houseId刪除房屋
+    public void deleteHouseById(Integer houseId) {
+        // 設定sql語法刪除房屋
+        String sql = "DELETE FROM house WHERE house_id = :houseId";
+        // 創建Map物件，用來存放房屋Id
+        Map<String, Object> map = new HashMap<>();
+        map.put("houseId", houseId);
+        namedParameterJdbcTemplate.update(sql, map);
+    }
+}
