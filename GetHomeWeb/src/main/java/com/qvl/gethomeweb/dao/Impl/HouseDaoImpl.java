@@ -72,11 +72,13 @@ public class HouseDaoImpl implements HouseDao {
             map.put("status", houseQueryParams.getStatus().name());
         }
 
+        sql += " ORDER BY " + houseQueryParams.getOrderBy() + " " + houseQueryParams.getOrderType();
         //使用NamedParameterJdbcTemplate查詢一批房屋資訊放到List中
         List<House> houseList = namedParameterJdbcTemplate.query(sql, map, new HouseRowMapper());
         return houseList;
 
     }
+
 
     @Override
 //    建立房屋

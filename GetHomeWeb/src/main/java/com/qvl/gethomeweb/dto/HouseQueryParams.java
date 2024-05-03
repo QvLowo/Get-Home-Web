@@ -1,5 +1,6 @@
 package com.qvl.gethomeweb.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.qvl.gethomeweb.constant.Gender;
 import com.qvl.gethomeweb.constant.HouseStatus;
 import com.qvl.gethomeweb.constant.HouseType;
@@ -11,4 +12,6 @@ public class HouseQueryParams {
     private String search;
     private Gender gender;
     private HouseStatus status;
+    private String orderBy;
+    private String orderType;
 }
