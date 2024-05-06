@@ -14,4 +14,6 @@ public class HouseQueryParams {
     private HouseStatus status;
     private String orderBy;
     private String orderType;
+    private Integer limit;
+    private Integer offset;
 }

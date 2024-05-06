@@ -53,7 +53,7 @@ public class HouseDaoImpl implements HouseDao {
 
         //創建Map物件，用來存放房屋
         Map<String, Object> map = new HashMap<>();
-
+//        篩選/搜尋查詢條件
         if (houseQueryParams.getHouseType() != null) {
             sql += " AND house_type = :houseType";
             map.put("houseType", houseQueryParams.getHouseType().name());
@@ -71,8 +71,13 @@ public class HouseDaoImpl implements HouseDao {
             sql += " AND status = :status";
             map.put("status", houseQueryParams.getStatus().name());
         }
-
+//        排序
         sql += " ORDER BY " + houseQueryParams.getOrderBy() + " " + houseQueryParams.getOrderType();
+//        分頁
+        sql += " LIMIT :limit OFFSET :offset";
+        map.put("limit", houseQueryParams.getLimit());
+        map.put("offset", houseQueryParams.getOffset());
+
         //使用NamedParameterJdbcTemplate查詢一批房屋資訊放到List中
         List<House> houseList = namedParameterJdbcTemplate.query(sql, map, new HouseRowMapper());
         return houseList;
