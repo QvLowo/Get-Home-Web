@@ -1,9 +1,10 @@
-package com.qvl.gethomeweb.service;
+package com.qvl.gethomeweb.service.Impl;
 
 import com.qvl.gethomeweb.dao.HouseDao;
 import com.qvl.gethomeweb.dto.HouseQueryParams;
 import com.qvl.gethomeweb.dto.HouseRequest;
 import com.qvl.gethomeweb.model.House;
+import com.qvl.gethomeweb.service.HouseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,4 +50,4 @@ public class HouseServiceImpl implements HouseService {
     public Integer countAllHouses(HouseQueryParams houseQueryParams) {
         return houseDao.countAllHouses(houseQueryParams);
     }
-}//class end
+}
