@@ -44,4 +44,9 @@ public class HouseServiceImpl implements HouseService {
     public void deleteHouseById(Integer houseId) {
         houseDao.deleteHouseById(houseId);
     }
+
+    @Override
+    public Integer countAllHouses(HouseQueryParams houseQueryParams) {
+        return houseDao.countAllHouses(houseQueryParams);
+    }
 }//class end

@@ -21,4 +21,6 @@ public interface HouseService {
 
     //刪除房屋資訊
     void deleteHouseById(Integer houseId);
+
+    Integer countAllHouses(HouseQueryParams houseQueryParams);
 }

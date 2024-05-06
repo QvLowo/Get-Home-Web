@@ -18,5 +18,7 @@ public interface HouseDao {
 
     void deleteHouseById(Integer houseId);
 
+    Integer countAllHouses(HouseQueryParams houseQueryParams);
+
 
 }

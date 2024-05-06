@@ -148,4 +148,35 @@ public class HouseDaoImpl implements HouseDao {
         map.put("houseId", houseId);
         namedParameterJdbcTemplate.update(sql, map);
     }
+
+    @Override
+    public Integer countAllHouses(HouseQueryParams houseQueryParams) {
+        String sql = "SELECT COUNT(*) FROM house WHERE 1=1";
+
+//        創建Map物件，用來存放房屋
+        Map<String, Object> map = new HashMap<>();
+
+//        篩選/搜尋查詢條件
+        if (houseQueryParams.getHouseType() != null) {
+            sql += " AND house_type = :houseType";
+            map.put("houseType", houseQueryParams.getHouseType().name());
+        }
+        if (houseQueryParams.getSearch() != null) {
+            sql += " AND address LIKE :search";
+            map.put("search", "%" + houseQueryParams.getSearch() + "%");
+        }
+
+        if (houseQueryParams.getGender() != null) {
+            sql += " AND gender = :gender";
+            map.put("gender", houseQueryParams.getGender().name());
+        }
+        if (houseQueryParams.getStatus() != null) {
+            sql += " AND status = :status";
+            map.put("status", houseQueryParams.getStatus().name());
+        }
+
+        Integer total = namedParameterJdbcTemplate.queryForObject(sql, map, Integer.class);
+
+        return total;
+    }
 }

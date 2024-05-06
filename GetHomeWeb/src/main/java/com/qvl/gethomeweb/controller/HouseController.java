@@ -7,6 +7,7 @@ import com.qvl.gethomeweb.dto.HouseQueryParams;
 import com.qvl.gethomeweb.dto.HouseRequest;
 import com.qvl.gethomeweb.model.House;
 import com.qvl.gethomeweb.service.HouseService;
+import com.qvl.gethomeweb.util.Page;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -40,7 +41,7 @@ public class HouseController {
 
     //    查詢全部房子資訊．並加上選填的查詢條件
     @GetMapping("/houses")
-    public ResponseEntity<List<House>> getAllHouses(
+    public ResponseEntity<Page<House>> getAllHouses(
 //            查詢條件
             @RequestParam(required = false) HouseType houseType,
             @RequestParam(required = false) String search,
@@ -67,9 +68,22 @@ public class HouseController {
         houseQueryParams.setLimit(limit);
         houseQueryParams.setOffset(offset);
 
+//        取得房屋list
         List<House> houseList = houseService.getAllHouses(houseQueryParams);
-        //根據RESTful設計回傳houseList
-        return ResponseEntity.status(HttpStatus.OK).body(houseList);
+
+//        計算房屋總筆數（可使用查詢條件）
+        Integer total = houseService.countAllHouses(houseQueryParams);
+
+        //設定json Object，改成回傳json Object給前端
+        Page<House> page = new Page<>();
+//        joson Object放入limit offset total results的值
+        page.setLimit(limit);
+        page.setOffset(offset);
+        page.setTotal(total);
+        page.setResults(houseList);
+
+        //回傳json Object
+        return ResponseEntity.status(HttpStatus.OK).body(page);
     }
 
 
