@@ -54,23 +54,7 @@ public class HouseDaoImpl implements HouseDao {
         //創建Map物件，用來存放房屋
         Map<String, Object> map = new HashMap<>();
 //        篩選/搜尋查詢條件
-        if (houseQueryParams.getHouseType() != null) {
-            sql += " AND house_type = :houseType";
-            map.put("houseType", houseQueryParams.getHouseType().name());
-        }
-        if (houseQueryParams.getSearch() != null) {
-            sql += " AND address LIKE :search";
-            map.put("search", "%" + houseQueryParams.getSearch() + "%");
-        }
-
-        if (houseQueryParams.getGender() != null) {
-            sql += " AND gender = :gender";
-            map.put("gender", houseQueryParams.getGender().name());
-        }
-        if (houseQueryParams.getStatus() != null) {
-            sql += " AND status = :status";
-            map.put("status", houseQueryParams.getStatus().name());
-        }
+        sql = filterSql(sql, map, houseQueryParams);
 //        排序
         sql += " ORDER BY " + houseQueryParams.getOrderBy() + " " + houseQueryParams.getOrderType();
 //        分頁
@@ -153,9 +137,18 @@ public class HouseDaoImpl implements HouseDao {
     public Integer countAllHouses(HouseQueryParams houseQueryParams) {
         String sql = "SELECT COUNT(*) FROM house WHERE 1=1";
 
-//        創建Map物件，用來存放房屋
+//      創建Map物件，用來存放房屋
         Map<String, Object> map = new HashMap<>();
+//      篩選/搜尋查詢條件
+        sql = filterSql(sql, map, houseQueryParams);
 
+        Integer total = namedParameterJdbcTemplate.queryForObject(sql, map, Integer.class);
+
+        return total;
+    }
+
+    //        獨立sql查詢條件
+    private String filterSql(String sql, Map<String, Object> map, HouseQueryParams houseQueryParams) {
 //        篩選/搜尋查詢條件
         if (houseQueryParams.getHouseType() != null) {
             sql += " AND house_type = :houseType";
@@ -174,9 +167,6 @@ public class HouseDaoImpl implements HouseDao {
             sql += " AND status = :status";
             map.put("status", houseQueryParams.getStatus().name());
         }
-
-        Integer total = namedParameterJdbcTemplate.queryForObject(sql, map, Integer.class);
-
-        return total;
+        return sql;
     }
 }
