@@ -1,5 +1,6 @@
 package com.qvl.gethomeweb.controller;
 
+import com.qvl.gethomeweb.dto.UserLoginRequest;
 import com.qvl.gethomeweb.dto.UserRegisterRequest;
 import com.qvl.gethomeweb.model.User;
 import com.qvl.gethomeweb.service.UserService;
@@ -22,4 +23,10 @@ public class UserController {
         User user = userService.getUserById(userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
+    @PostMapping("/users/login")
+    public ResponseEntity<User> login(@RequestBody @Valid UserLoginRequest userLoginRequest){
+        User user = userService.login(userLoginRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(user);
+    }
+
 }

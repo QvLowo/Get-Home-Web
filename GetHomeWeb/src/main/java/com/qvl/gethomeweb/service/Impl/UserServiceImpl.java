@@ -1,6 +1,7 @@
 package com.qvl.gethomeweb.service.Impl;
 
 import com.qvl.gethomeweb.dao.UserDao;
+import com.qvl.gethomeweb.dto.UserLoginRequest;
 import com.qvl.gethomeweb.dto.UserRegisterRequest;
 import com.qvl.gethomeweb.model.User;
 import com.qvl.gethomeweb.service.UserService;
@@ -34,5 +35,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(Integer userId) {
         return userDao.getUserById(userId);
+    }
+
+    @Override
+    public User login(UserLoginRequest userLoginRequest) {
+        User user = userDao.getUserByPhone(userLoginRequest.getPhone());
+        if (user == null) {
+            log.warn("該手機號碼 {} 尚未註冊", userLoginRequest.getPhone());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "該手機號碼尚未註冊");
+        }
+        if (user.getPassword().equals(userLoginRequest.getPassword())) {
+            return user;
+        } else {
+            log.warn("該手機號碼{}的密碼錯誤", userLoginRequest.getPhone());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "密碼錯誤!");
+        }
     }
 }
