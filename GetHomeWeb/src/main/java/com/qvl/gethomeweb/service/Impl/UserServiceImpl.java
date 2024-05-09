@@ -4,6 +4,8 @@ import com.qvl.gethomeweb.dao.UserDao;
 import com.qvl.gethomeweb.dto.UserLoginRequest;
 import com.qvl.gethomeweb.dto.UserRegisterRequest;
 import com.qvl.gethomeweb.model.User;
+import com.qvl.gethomeweb.model.Role;
+import com.qvl.gethomeweb.dao.RoleDao;
 import com.qvl.gethomeweb.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,8 +20,11 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private RoleDao roleDao;
+
     @Override
-    public Integer register(UserRegisterRequest userRegisterRequest) {
+    public Integer landLordRegister(UserRegisterRequest userRegisterRequest) {
 //        檢查手機號碼是否已被註冊
         User user = userDao.getUserByPhone(userRegisterRequest.getPhone());
 
@@ -28,9 +33,34 @@ public class UserServiceImpl implements UserService {
             log.warn("該手機號碼 {} 已被{}註冊", userRegisterRequest.getPhone(), userRegisterRequest.getUsername());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "手機號碼已被註冊");
         }
+        Integer userId = userDao.createUser(userRegisterRequest);
+
+        Role landLordRole = roleDao.getRoleByName("ROLE_LANDLORD");
+        userDao.addRoleForUserId(userId, landLordRole);
 //        註冊帳號
-        return userDao.createUser(userRegisterRequest);
+        return userId;
     }
+
+    @Override
+    public Integer tenantRegister(UserRegisterRequest userRegisterRequest) {
+//        檢查手機號碼是否已被註冊
+        User user = userDao.getUserByPhone(userRegisterRequest.getPhone());
+
+        Integer userId = userDao.createUser(userRegisterRequest);
+
+        if (user != null) {
+//            提示log warn資訊顯示手機號碼被誰重複註冊
+            log.warn("該手機號碼 {} 已被{}註冊", userRegisterRequest.getPhone(), userRegisterRequest.getUsername());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "手機號碼已被註冊");
+        }
+        Role landLordRole = roleDao.getRoleByName("ROLE_TENANT");
+        userDao.addRoleForUserId(userId, landLordRole);
+//        註冊帳號
+        return userId;
+    }
+//    public String PhoneFliter(UserRegisterRequest userRegisterRequest){
+//待新增精煉程式filter
+//    }
 
     @Override
     public User getUserById(Integer userId) {

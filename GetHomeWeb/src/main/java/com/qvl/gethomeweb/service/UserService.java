@@ -5,7 +5,10 @@ import com.qvl.gethomeweb.dto.UserRegisterRequest;
 import com.qvl.gethomeweb.model.User;
 
 public interface UserService {
-    Integer register(UserRegisterRequest userRegisterRequest);
+    Integer landLordRegister(UserRegisterRequest userRegisterRequest);
+
+    Integer tenantRegister(UserRegisterRequest userRegisterRequest);
+
 
     User getUserById(Integer userId);
 
