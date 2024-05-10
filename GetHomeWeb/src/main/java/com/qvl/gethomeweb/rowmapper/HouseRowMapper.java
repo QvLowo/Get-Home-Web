@@ -21,11 +21,7 @@ public class HouseRowMapper implements RowMapper<House> {
 
         house.setAddress(rs.getString("address"));
         house.setImageUrl(rs.getString("image_url"));
-        house.setPrice(rs.getInt("price"));
-        house.setUtilities(rs.getInt("utilities"));
-        house.setSquare(rs.getInt("square"));
-        house.setManagementCost(rs.getInt("management_cost"));
-
+        house.setPricePerMonth(rs.getInt("price_per_month"));
         house.setGender(Gender.valueOf(rs.getString("gender")));
         house.setStatus(HouseStatus.valueOf(rs.getString("status")));
 

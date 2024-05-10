@@ -94,7 +94,7 @@ public class UserDaoImpl implements UserDao {
 
     //    根據userId刪除角色
     @Override
-    public void deleteRoleFormUserId(Integer userId, Role role) {
+    public void deleteRoleFromUserId(Integer userId, Role role) {
         String sql = "DELETE FROM user_role WHERE user_id = :userId AND role_id = :roleId";
         Map<String, Object> map = new HashMap<>();
         map.put("userId", userId);

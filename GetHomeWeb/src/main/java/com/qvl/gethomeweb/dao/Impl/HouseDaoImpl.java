@@ -27,7 +27,7 @@ public class HouseDaoImpl implements HouseDao {
     //    查詢一筆房子資訊
     public House getHouseById(Integer houseId) {
         // 設定sql語法透過houseId查詢所有房屋資訊
-        String sql = "SELECT house_id,house_type, address, image_url, price, utilities, square, management_cost, gender, status, description ,created_date,last_update_date from house  where house_id =:houseId";
+        String sql = "SELECT house_id,house_type, address, image_url, price_per_month, gender, status, description ,created_date,last_update_date from house  where house_id =:houseId";
 
         //創建Map物件，用來存放房屋
         Map<String, Object> map = new HashMap<>();
@@ -47,8 +47,7 @@ public class HouseDaoImpl implements HouseDao {
     //    查詢全部房子資訊．並加上選填的查詢條件
     public List<House> getAllHouses(HouseQueryParams houseQueryParams) {
         // 設定sql語法透過houseId查詢所有房屋資訊，加入where 1=1如果查詢條件不存在，使用原本sql語法，若存在則加上條件查詢的sql語法
-        String sql = "SELECT house_id,house_type, address, image_url, price, utilities, " +
-                "square, management_cost, gender, status, description ,created_date,last_update_date" +
+        String sql = "SELECT house_id,house_type, address, image_url, price_per_month, gender, status, description ,created_date,last_update_date" +
                 " FROM house WHERE 1=1";
 
         //創建Map物件，用來存放房屋
@@ -73,23 +72,18 @@ public class HouseDaoImpl implements HouseDao {
 //    建立房屋
     public Integer createHouse(HouseRequest houseRequest) {
 //      設定sql語法新增房屋資訊
-        String sql = "INSERT INTO House (house_type, address, image_url, price, utilities, square, management_cost, gender, status, description) value(:houseType,:address,:imageUrl,:price,:utilities,:square,:managementCost,:gender,:status,:description)";
+        String sql = "INSERT INTO House (house_type, address, image_url, price_per_month, gender, status, description) value(:houseType,:address,:imageUrl,:pricePerMonth,:gender,:status,:description)";
 //      創建Map物件，用來存放房屋資訊
         Map<String, Object> map = new HashMap<>();
         map.put("houseType", houseRequest.getHouseType().toString());
         map.put("address", houseRequest.getAddress());
         map.put("imageUrl", houseRequest.getImageUrl());
-        map.put("price", houseRequest.getPrice());
-        map.put("utilities", houseRequest.getUtilities());
-        map.put("square", houseRequest.getSquare());
-        map.put("managementCost", houseRequest.getManagementCost());
+        map.put("pricePerMonth", houseRequest.getPricePerMonth());
         map.put("gender", houseRequest.getGender().toString());
         map.put("status", houseRequest.getStatus().toString());
         map.put("description", houseRequest.getDescription());
 //  創建Date，用來存放創建時間及最後更新時間
-        Date now = new Date();
-        map.put("createdDate", now);
-        map.put("lastUpdateDate", now);
+
 //使用KeyHolder取得自動生成的houseId
         KeyHolder keyHolder = new GeneratedKeyHolder();
         namedParameterJdbcTemplate.update(sql, new MapSqlParameterSource(map), keyHolder);
@@ -101,23 +95,18 @@ public class HouseDaoImpl implements HouseDao {
 //    更新房屋
     public void updateHouse(Integer houseId, HouseRequest houseRequest) {
 //       設定sql語法更新房屋資訊
-        String sql = "UPDATE House SET house_type = :houseType, address = :address, image_url = :imageUrl, price = :price, utilities = :utilities, square = :square, management_cost = :managementCost, gender = :gender, status = :status, description = :description WHERE house_id = :houseId";
+        String sql = "UPDATE House SET house_type = :houseType, address = :address, image_url = :imageUrl, price_per_month =:pricePerMonth, gender = :gender, status = :status, description = :description WHERE house_id = :houseId";
 //       創建Map物件，用來存放房屋資訊
         Map<String, Object> map = new HashMap<>();
         map.put("houseId", houseId);
         map.put("houseType", houseRequest.getHouseType().toString());
         map.put("address", houseRequest.getAddress());
         map.put("imageUrl", houseRequest.getImageUrl());
-        map.put("price", houseRequest.getPrice());
-        map.put("utilities", houseRequest.getUtilities());
-        map.put("square", houseRequest.getSquare());
-        map.put("managementCost", houseRequest.getManagementCost());
+        map.put("pricePerMonth", houseRequest.getPricePerMonth());
         map.put("gender", houseRequest.getGender().toString());
         map.put("status", houseRequest.getStatus());
         map.put("description", houseRequest.getDescription());
 
-//        存放最後更新日期到map物件
-        map.put("lastUpdateDate", new Date());
         namedParameterJdbcTemplate.update(sql, map);
     }
 

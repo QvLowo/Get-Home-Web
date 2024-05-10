@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,32 +22,20 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-//    房東註冊
-    @PostMapping("/users/register/landlord")
-    public ResponseEntity<User> landlordRegister(@RequestBody @Valid UserRegisterRequest userRegisterRequest) {
+    //    根據角色id註冊，分成房東及租客
+    @PostMapping("/users/register/{roleId}")
+    public ResponseEntity<User> landlordRegister(@PathVariable Integer roleId, @RequestBody @Valid UserRegisterRequest userRegisterRequest) {
 //        密碼轉成hash儲存
         String hashedPassword = passwordEncoder.encode(userRegisterRequest.getPassword());
         userRegisterRequest.setPassword(hashedPassword);
 
-        Integer userId = userService.landLordRegister(userRegisterRequest);
+        Integer userId = userService.register(roleId, userRegisterRequest);
         User user = userService.getUserById(userId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
-//    租客註冊
-    @PostMapping("/users/register/tenant")
-    public ResponseEntity<User> tenantRegister(@RequestBody @Valid UserRegisterRequest userRegisterRequest) {
-//        密碼轉成hash儲存
-        String hashedPassword = passwordEncoder.encode(userRegisterRequest.getPassword());
-        userRegisterRequest.setPassword(hashedPassword);
-
-        Integer userId = userService.tenantRegister(userRegisterRequest);
-        User user = userService.getUserById(userId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(user);
-    }
-
-//    登入功能
+    //    登入功能
     @PostMapping("/users/login")
     public ResponseEntity<User> login(@RequestBody @Valid UserLoginRequest userLoginRequest) {
         User user = userService.login(userLoginRequest);

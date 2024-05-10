@@ -17,13 +17,7 @@ public class HouseRequest {
     @NotNull
     private String imageUrl;
     @NotNull
-    private Integer price;
-    @NotNull
-    private Integer utilities;
-    @NotNull
-    private Integer square;
-    @NotNull
-    private Integer managementCost;
+    private Integer pricePerMonth;
     private Gender gender;
     private HouseStatus status;
     private String description;
