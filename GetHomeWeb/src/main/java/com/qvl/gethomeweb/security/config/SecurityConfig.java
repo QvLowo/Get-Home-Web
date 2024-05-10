@@ -40,7 +40,7 @@ public class SecurityConfig {
 //                設定session產生機制
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
-//                設定csrf防禦惡意的POST/PUT/DELETE request，前端需傳入X-XSRF-TOKEN才可請求
+//                設定csrf防禦惡意的POST/PUT/DELETE request，前端需帶上X-XSRF-TOKEN才可以請求
                 .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                                 .csrfTokenRequestHandler(createCsrfCHandler())
 //                        公開的登入、註冊頁面忽略csrf防禦
@@ -51,13 +51,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> request
 //                        所有人都可以訪問登入、註冊頁面
                                 .requestMatchers("/users/login", "/users/register/*").permitAll()
-//                        查看房屋頁面限制登入後才可訪問
+//                        房屋相關新增、修改、刪除等功能限制為房東權限
+                                .requestMatchers("/houses/landlord/**").hasRole("LANDLORD")
+//                         房屋查詢功能限登入才可訪問
                                 .requestMatchers("/houses").hasAnyRole("TENANT", "LANDLORD")
                                 .requestMatchers("/houses/*").hasAnyRole("TENANT", "LANDLORD")
-//                        房屋相關新增、修改、刪除等功能限制為房東權限
-                                .requestMatchers("/landlord/**").hasAnyRole("LANDLORD")
-//                            租屋頁面限制為租客權限
-                                .requestMatchers("/users/**").hasAnyRole("TENANT")
 //                        根據deny-by-default設計，避免意外暴露風險，所以預設未設定權限的頁面皆禁止訪問
                                 .anyRequest().denyAll()
                 )
