@@ -87,8 +87,8 @@ public class HouseController {
         return ResponseEntity.status(HttpStatus.OK).body(page);
     }
 
-    //    限定只有管理員或房東才可以執行新增房屋的方法
-    @PreAuthorize("hasRole('ADMIN' or 'LANDLORD')")
+    //    限定只有房東才可以執行新增房屋的方法
+    @PreAuthorize("hasRole('LANDLORD')")
     //新增房屋
     @PostMapping("/houses/landlord/create")
     public ResponseEntity<House> createHouse(@RequestBody @Valid HouseRequest houseRequest) {
@@ -98,7 +98,7 @@ public class HouseController {
 
     }
 
-    //    限定只有管理員或房東才可以執行更新房屋資訊的方法
+    //    限定只有房東才可以執行更新房屋資訊的方法
     @PreAuthorize("hasRole('LANDLORD')")
     //透過houseId更新房屋資訊
     @PutMapping("/houses/landlord/update/{houseId}")
@@ -115,7 +115,7 @@ public class HouseController {
         return ResponseEntity.status(HttpStatus.OK).body(updatedHouse);
     }
 
-    //    限定只有管理員或房東才可以執行刪除房屋的方法
+    //    限定只有房東才可以執行刪除房屋的方法
     @PreAuthorize("hasRole('LANDLORD')")
     //透過houseId刪除房屋，刪除成功或房屋不存在都回傳204
     @DeleteMapping("/houses/landlord/delete/{houseId}")
