@@ -35,7 +35,7 @@ public class HouseDaoImpl implements HouseDao {
         //使用NamedParameterJdbcTemplate查詢一批房屋資訊放到List中
         List<House> houseList = namedParameterJdbcTemplate.query(sql, map, new HouseRowMapper());
         //回傳第1～Ｎ筆房屋資訊
-        if (!houseList.isEmpty()) {
+        if (houseList.size()>0) {
             return houseList.get(0);
         } else {
             return null;
