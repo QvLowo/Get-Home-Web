@@ -18,7 +18,7 @@ public interface UserDao {
 
     void addRoleForUserId(Integer userId, Role role);
 
-    void deleteRoleFormUserId(Integer userId, Role role);
+    void deleteRoleFromUserId(Integer userId, Role role);
 }
 
 
