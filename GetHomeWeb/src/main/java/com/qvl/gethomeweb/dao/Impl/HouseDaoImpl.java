@@ -12,7 +12,6 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +35,7 @@ public class HouseDaoImpl implements HouseDao {
         //使用NamedParameterJdbcTemplate查詢一批房屋資訊放到List中
         List<House> houseList = namedParameterJdbcTemplate.query(sql, map, new HouseRowMapper());
         //回傳第1～Ｎ筆房屋資訊
-        if (houseList.size() > 0) {
+        if (!houseList.isEmpty()) {
             return houseList.get(0);
         } else {
             return null;
