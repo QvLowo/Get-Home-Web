@@ -14,6 +14,7 @@ public class RentServiceImpl implements RentService {
 
     @Override
     public Integer createRent(Integer userId,Integer houseId, RentRequest rentRequest) {
+
         return rentDao.createRent(userId,houseId,rentRequest);
     }
 

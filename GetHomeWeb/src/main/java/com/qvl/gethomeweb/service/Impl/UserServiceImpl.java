@@ -34,13 +34,16 @@ public class UserServiceImpl implements UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "手機號碼已被註冊");
         }
 //        設定預設角色1為房東，2為租客
-        Role role = null;
-        if (roleId == 1 ) {
-            role = roleDao.getRoleByName("ROLE_LANDLORD");
-        } else if (roleId == 2) {
-            role = roleDao.getRoleByName("ROLE_TENANT");
-        } else {
-            log.warn("角色不存在");
+        Role role = roleDao.getRoleById(roleId);
+        switch (roleId) {
+            case 1:
+                roleDao.getRoleByName("ROLE_LANDLORD");
+                break;
+            case 2:
+                roleDao.getRoleByName("ROLE_ADMIN");
+                break;
+            default:
+                log.warn("角色不存在");
         }
         Integer userId = userDao.createUser(userRegisterRequest);
 //        加入userId與角色關聯

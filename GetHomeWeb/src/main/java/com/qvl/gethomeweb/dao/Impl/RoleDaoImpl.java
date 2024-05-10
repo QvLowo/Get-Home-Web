@@ -20,12 +20,25 @@ public class RoleDaoImpl implements RoleDao {
     @Autowired
     private RoleRowMapper roleRowMapper;
 
-    //    取得role table的角色名稱
+    //    透過角色名稱取得role table的角色資訊
     @Override
     public Role getRoleByName(String roleName) {
         String sql = "SELECT role_id , role_name FROM role WHERE role_name = :roleName";
         Map<String, Object> map = new HashMap<>();
         map.put("roleName", roleName);
+        List<Role> roleList = namedParameterJdbcTemplate.query(sql, map, roleRowMapper);
+        if (roleList.size() > 0) {
+            return roleList.get(0);
+        } else {
+            return null;
+        }
+    }
+    //    透過角色id取得role table的角色資訊
+    @Override
+    public Role getRoleById(Integer roleId) {
+        String sql = "SELECT role_id , role_name FROM role WHERE role_id = :roleId";
+        Map<String, Object> map = new HashMap<>();
+        map.put("roleId", roleId);
         List<Role> roleList = namedParameterJdbcTemplate.query(sql, map, roleRowMapper);
         if (roleList.size() > 0) {
             return roleList.get(0);
