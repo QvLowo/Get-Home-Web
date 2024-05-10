@@ -13,10 +13,7 @@ public class House {
     private HouseType houseType;
     private String address;
     private String imageUrl;
-    private Integer price;
-    private Integer utilities;
-    private Integer square;
-    private Integer managementCost;
+    private Integer pricePerMonth;
     private Gender gender;
     private HouseStatus status;
     private String description;
