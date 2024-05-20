@@ -15,8 +15,7 @@ public class RentRowMapper implements RowMapper<Rent> {
         rent.setTotalAmount(rs.getInt("total_amount"));
         rent.setStatus(rs.getString("status"));
         rent.setCreateDate(rs.getDate("create_date"));
-        rent.setUpdateDate(rs.getDate("update_date"));
+        rent.setLastUpdateDate(rs.getDate("update_date"));
         return rent;
-
     }
 }
