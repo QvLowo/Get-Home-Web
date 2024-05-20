@@ -1,6 +1,6 @@
 package com.qvl.gethomeweb.controller;
 
-import com.qvl.gethomeweb.dto.RentRequest;
+import com.qvl.gethomeweb.dto.CreateRentRequest;
 import com.qvl.gethomeweb.model.Rent;
 import com.qvl.gethomeweb.service.RentService;
 import jakarta.validation.Valid;
@@ -19,15 +19,11 @@ public class RentController {
 
 //    新增租屋訂單，新增訂單方法限制房客權限
     @PreAuthorize("hasRole('TENANT')")
-    @PostMapping("/users/{userId}/rent/{houseId}")
-    public ResponseEntity<Rent> createRent(@PathVariable Integer userId, @RequestBody @Valid RentRequest rentRequest,@PathVariable Integer houseId) {
-        Integer rentId = rentService.createRent(userId,houseId ,rentRequest);
-
+    @PostMapping("/users/{userId}/rent")
+    public ResponseEntity<Rent> createRent(@PathVariable Integer userId, @RequestBody @Valid CreateRentRequest createRentRequest) {
+        Integer rentId =rentService.createRent(userId, createRentRequest);
         Rent rent = rentService.getRentById(rentId);
-
         return ResponseEntity.status(HttpStatus.CREATED).body(rent);
     }
-
-
 
 }
