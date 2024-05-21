@@ -20,5 +20,5 @@ public interface HouseDao {
 
     Integer countAllHouses(HouseQueryParams houseQueryParams);
 
-
+    Integer getPrice(Integer houseId);
 }

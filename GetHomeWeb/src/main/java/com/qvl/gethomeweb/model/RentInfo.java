@@ -2,11 +2,13 @@ package com.qvl.gethomeweb.model;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
 public class RentInfo {
     private Integer rentInfoId;
+    private String paymentId;
     private Integer rentId;
     private Integer houseId;
     private Integer amount;

@@ -19,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class RentServiceImpl implements RentService {
@@ -76,6 +77,7 @@ public class RentServiceImpl implements RentService {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "輸入金額超過總租金");
             }
             RentInfo rentInfo = new RentInfo();
+            rentInfo.setPaymentId(UUID.randomUUID().toString());
             rentInfo.setHouseId(rentItem.getHouseId());
             rentInfo.setMonth(rentItem.getMonth());
             rentInfo.setAmount(amount);
@@ -93,5 +95,9 @@ public class RentServiceImpl implements RentService {
         return rentDao.getRentById(rentId);
     }
 
-
+    @Override
+    public String generateRentUUID(String paymentId) {
+    String randomUUID = UUID.randomUUID().toString();
+        return randomUUID;
+    }
 }

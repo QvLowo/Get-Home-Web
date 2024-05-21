@@ -1,6 +1,5 @@
 package com.qvl.gethomeweb.controller;
 
-import com.qvl.gethomeweb.constant.Gender;
 import com.qvl.gethomeweb.constant.HouseStatus;
 import com.qvl.gethomeweb.constant.HouseType;
 import com.qvl.gethomeweb.dto.HouseQueryParams;
@@ -46,7 +45,6 @@ public class HouseController {
 //            查詢條件
             @RequestParam(required = false) HouseType houseType,
             @RequestParam(required = false) String search,
-            @RequestParam(required = false) Gender gender,
             @RequestParam(required = false) HouseStatus status,
 //            排序功能，預設根據創建時間降冪排序（新->舊）
             @RequestParam(defaultValue = "created_date") String orderBy,
@@ -62,7 +60,6 @@ public class HouseController {
         HouseQueryParams houseQueryParams = new HouseQueryParams();
         houseQueryParams.setHouseType(houseType);
         houseQueryParams.setSearch(search);
-        houseQueryParams.setGender(gender);
         houseQueryParams.setStatus(status);
         houseQueryParams.setOrderBy(orderBy);
         houseQueryParams.setOrderType(orderType);

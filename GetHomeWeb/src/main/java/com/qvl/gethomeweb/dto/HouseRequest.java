@@ -1,6 +1,5 @@
 package com.qvl.gethomeweb.dto;
 
-import com.qvl.gethomeweb.constant.Gender;
 import com.qvl.gethomeweb.constant.HouseStatus;
 import com.qvl.gethomeweb.constant.HouseType;
 import jakarta.validation.constraints.NotNull;
@@ -18,7 +17,6 @@ public class HouseRequest {
     private String imageUrl;
     @NotNull
     private Integer pricePerMonth;
-    private Gender gender;
     private HouseStatus status;
     private String description;
 }

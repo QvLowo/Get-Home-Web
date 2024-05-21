@@ -9,4 +9,5 @@ import org.springframework.stereotype.Service;
 public interface RentService {
     Integer createRent(Integer userId,CreateRentRequest createRentRequest);
     Rent getRentById(Integer rentId);
+    public String generateRentUUID(String paymentId);
 }

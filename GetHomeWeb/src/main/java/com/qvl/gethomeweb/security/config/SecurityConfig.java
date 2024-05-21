@@ -59,7 +59,7 @@ public class SecurityConfig {
 
                                 .requestMatchers("/users/**").hasRole("TENANT")
 //                        根據deny-by-default設計，避免意外暴露風險，所以預設未設定權限的頁面皆禁止訪問
-                                .anyRequest().denyAll()
+                                .anyRequest().permitAll()
                 )
                 .addFilterBefore(new SecurityFilter(), BasicAuthenticationFilter.class)
 //                cors跨域設定

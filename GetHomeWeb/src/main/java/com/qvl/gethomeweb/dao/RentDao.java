@@ -13,5 +13,6 @@ public interface RentDao {
     void createRentInfo(Integer rentId, List<RentInfo> rentInfoList);
 
     Rent getRentById(Integer rentId);
+    RentInfo getRentInfoById(String paymentId);
 
 }

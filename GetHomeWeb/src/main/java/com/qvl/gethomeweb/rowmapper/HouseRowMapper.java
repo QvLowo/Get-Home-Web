@@ -1,7 +1,6 @@
 package com.qvl.gethomeweb.rowmapper;
 
 
-import com.qvl.gethomeweb.constant.Gender;
 import com.qvl.gethomeweb.constant.HouseStatus;
 import com.qvl.gethomeweb.constant.HouseType;
 import com.qvl.gethomeweb.model.House;
@@ -22,7 +21,6 @@ public class HouseRowMapper implements RowMapper<House> {
         house.setAddress(rs.getString("address"));
         house.setImageUrl(rs.getString("image_url"));
         house.setPricePerMonth(rs.getInt("price_per_month"));
-        house.setGender(Gender.valueOf(rs.getString("gender")));
         house.setStatus(HouseStatus.valueOf(rs.getString("status")));
 
         house.setDescription(rs.getString("description"));

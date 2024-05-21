@@ -2,10 +2,13 @@ package com.qvl.gethomeweb.dao.Impl;
 
 import com.qvl.gethomeweb.dao.RentDao;
 import com.qvl.gethomeweb.dto.CreateRentRequest;
-import com.qvl.gethomeweb.dto.RentItem;
 import com.qvl.gethomeweb.model.Rent;
 import com.qvl.gethomeweb.model.RentInfo;
+import com.qvl.gethomeweb.rowmapper.RentInfoRowMapper;
 import com.qvl.gethomeweb.rowmapper.RentRowMapper;
+import com.qvl.gethomeweb.service.Impl.UserServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -19,8 +22,10 @@ import java.util.Map;
 
 @Repository
 public class RentDaoImpl implements RentDao {
+    private final static Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
     @Autowired
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private  NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
     //    創建租屋訂單
     @Override
     public Integer createRent(Integer userId, Integer totalAmount, CreateRentRequest createRentRequest) {
@@ -38,15 +43,16 @@ public class RentDaoImpl implements RentDao {
 
     @Override
     public void createRentInfo(Integer rentId, List<RentInfo> rentInfoList) {
-        String sql = "INSERT INTO rent_info(rent_id,house_id,amount,month)VALUES(:rentId,:houseId,:amount,:month)";
+        String sql = "INSERT INTO rent_info(rent_id,payment_id,house_id,amount,month)VALUES(:rentId,:paymentId,:houseId,:amount,:month)";
         MapSqlParameterSource[] parameterSources = new MapSqlParameterSource[rentInfoList.size()];
-        for(int i = 0;i<rentInfoList.size();i++){
+        for (int i = 0; i < rentInfoList.size(); i++) {
             RentInfo rentInfo = rentInfoList.get(i);
-            parameterSources[i]=new MapSqlParameterSource();
-            parameterSources[i].addValue("rentId",rentId);
-            parameterSources[i].addValue("houseId",rentInfo.getHouseId());
-            parameterSources[i].addValue("amount",rentInfo.getAmount());
-            parameterSources[i].addValue("month",rentInfo.getMonth());
+            parameterSources[i] = new MapSqlParameterSource();
+            parameterSources[i].addValue("rentId", rentId);
+            parameterSources[i].addValue("paymentId", rentInfo.getPaymentId());
+            parameterSources[i].addValue("houseId", rentInfo.getHouseId());
+            parameterSources[i].addValue("amount", rentInfo.getAmount());
+            parameterSources[i].addValue("month", rentInfo.getMonth());
         }
         namedParameterJdbcTemplate.batchUpdate(sql, parameterSources);
 
@@ -66,4 +72,19 @@ public class RentDaoImpl implements RentDao {
         }
     }
 
+    @Override
+    public RentInfo getRentInfoById(String paymentId) {
+        String sql = "SELECT rent_info_id,rent_id,payment_id,rent_id,house_id,amount,`month`,created_date,last_update_date FROM rent_info WHERE payment_id = :paymentId";
+        Map<String, Object> map = new HashMap<>();
+        map.put("paymentId", paymentId);
+
+        List<RentInfo> rentInfoList = namedParameterJdbcTemplate.query(sql, map, new RentInfoRowMapper());
+        if (!rentInfoList.isEmpty()) {
+            return rentInfoList.get(0);
+        } else {
+            return null;
+
+        }
+    }
 }
+
