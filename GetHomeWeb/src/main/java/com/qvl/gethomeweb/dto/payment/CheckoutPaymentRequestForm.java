@@ -1,5 +1,7 @@
 package com.qvl.gethomeweb.dto.payment;
 
+import com.qvl.gethomeweb.model.payment.ProductPackageForm;
+import com.qvl.gethomeweb.model.payment.RedirectUrls;
 import lombok.Data;
 
 import java.math.BigDecimal;

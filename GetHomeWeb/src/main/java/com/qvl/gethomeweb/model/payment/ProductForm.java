@@ -1,4 +1,4 @@
-package com.qvl.gethomeweb.dto.payment;
+package com.qvl.gethomeweb.model.payment;
 
 import lombok.Data;
 

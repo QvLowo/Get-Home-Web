@@ -1,4 +1,4 @@
-package com.qvl.gethomeweb.dto.payment;
+package com.qvl.gethomeweb.model.payment;
 
 import lombok.Data;
 
@@ -6,4 +6,5 @@ import lombok.Data;
 public class RedirectUrls {
     private String confirmUrl;
     private String cancelUrl;
+    private String confirmUrlType;
 }

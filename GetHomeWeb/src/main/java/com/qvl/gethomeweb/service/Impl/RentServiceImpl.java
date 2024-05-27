@@ -30,24 +30,6 @@ public class RentServiceImpl implements RentService {
     @Autowired
     HouseDao houseDao;
 
-    //    @Override
-//    public Integer createRent(Integer userId, CreateRentRequest createRentRequest) {
-////        java8後出的功能，計算租期總月數
-//        Period period = Period.between(createRentRequest.getStartDate(), createRentRequest.getEndDate());
-//        int years = period.getYears();
-////      不足月的部分算一個月
-//        int months = period.getMonths()+1;
-////        計算租期總月數
-//        int totalMonths = years * 12 + months;
-////        用houseID取得房屋資料
-//        House house = houseDao.getHouseById(createRentRequest.getHouseId());
-////        計算租期總金額
-//        int totalAmount = house.getPricePerMonth() * totalMonths;
-//
-//        Integer rentId = rentDao.createRent(userId,totalAmount, createRentRequest);
-//
-//        return rentId;
-//    }
     @Transactional
     @Override
 //    建立租屋訂單
@@ -95,6 +77,7 @@ public class RentServiceImpl implements RentService {
         return rentDao.getRentById(rentId);
     }
 
+//    產生訂單UUID碼paymentId 對應電子支付的orderId
     @Override
     public String generateRentUUID(String paymentId) {
     String randomUUID = UUID.randomUUID().toString();
