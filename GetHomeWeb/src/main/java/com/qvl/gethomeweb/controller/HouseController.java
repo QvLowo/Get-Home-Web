@@ -123,7 +123,7 @@ public class HouseController {
     //    限定只有房東才可以執行刪除房屋的方法
     @PreAuthorize("hasRole('LANDLORD')")
     //透過houseId刪除房屋，刪除成功或房屋不存在都回傳204
-    @DeleteMapping("/house/houseId}")
+    @DeleteMapping("/house/{houseId}")
     public ResponseEntity<House> deleteHouse(@PathVariable Integer houseId) {
         houseService.deleteHouseById(houseId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
