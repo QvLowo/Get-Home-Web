@@ -52,10 +52,9 @@ public class SecurityConfig {
 //                        所有人都可以訪問登入、註冊頁面
                                 .requestMatchers("/users/login", "/users/register/*").permitAll()
 //                        房屋相關新增、修改、刪除等功能限制為房東權限
-                                .requestMatchers("/houses/landlord/**").hasRole("LANDLORD")
+                                .requestMatchers("/house**").hasRole("LANDLORD")
 //                         房屋查詢功能限登入才可訪問
-                                .requestMatchers("/houses").hasAnyRole("TENANT", "LANDLORD")
-                                .requestMatchers("/houses/*").hasAnyRole("TENANT", "LANDLORD")
+                                .requestMatchers("/houses/**").hasAnyRole("TENANT", "LANDLORD")
 
                                 .requestMatchers("/users/**").hasRole("TENANT")
 //                        根據deny-by-default設計，避免意外暴露風險，所以預設未設定權限的頁面皆禁止訪問

@@ -11,12 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "user api")
+@Tag(name = "使用者API")
+@RequestMapping("/users")
 @RestController
 public class UserController {
     @Autowired
@@ -25,9 +23,9 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Operation(summary = "註冊")
+    @Operation(summary = "註冊，分成房東/租客註冊，roleId : 1為房東，2為租客" )
     //        根據角色id註冊，分成房東及租客
-    @PostMapping("/users/register/{roleId}")
+    @PostMapping("/register/{roleId}")
     public ResponseEntity<User> register(@PathVariable Integer roleId, @RequestBody @Valid UserRegisterRequest userRegisterRequest) {
 //        密碼轉成hash儲存
         String hashedPassword = passwordEncoder.encode(userRegisterRequest.getPassword());
@@ -40,7 +38,7 @@ public class UserController {
     }
 
     //        登入功能
-    @PostMapping("/users/login")
+    @PostMapping("/login")
     @Operation(summary = "登入")
     public ResponseEntity<User> login(@RequestBody @Valid UserLoginRequest userLoginRequest) {
         User user = userService.login(userLoginRequest);
