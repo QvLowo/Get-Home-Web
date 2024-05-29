@@ -45,15 +45,15 @@ public class SecurityConfig {
                                 .csrfTokenRequestHandler(createCsrfCHandler())
 //                        公開的登入、註冊頁面忽略csrf防禦
                                 .ignoringRequestMatchers("/users/login", "/users/register/*")
-                                .ignoringRequestMatchers("/swagger-ui/**",
-                                        "/v3/api-docs/**")
+//                        openapi-swagger3忽略csrf防禦
+                                .ignoringRequestMatchers("/swagger-ui/**", "/v3/api-docs/**")
                 )
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults())
                 .authorizeHttpRequests(request -> request
 //                        所有人都可以訪問登入、註冊頁面
                                 .requestMatchers("/users/login", "/users/register/*").permitAll()
-//                        所有人都可以訪問api頁面
+//                        所有人都可以訪問swagger api頁面
                                 .requestMatchers("/swagger-ui/**",
                                         "/v3/api-docs/**").permitAll()
 //                        房屋相關新增、修改、刪除等功能限制為房東權限
