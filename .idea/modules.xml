@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/GetHomeWeb/GetHomeWeb.iml" filepath="$PROJECT_DIR$/GetHomeWeb/GetHomeWeb.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Get-Home-Web.iml" filepath="$PROJECT_DIR$/.idea/Get-Home-Web.iml" />
     </modules>
   </component>
 </project>

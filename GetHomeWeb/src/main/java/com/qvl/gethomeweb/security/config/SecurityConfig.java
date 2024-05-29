@@ -42,15 +42,20 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
 //                設定csrf防禦惡意的POST/PUT/DELETE request，前端需帶上X-XSRF-TOKEN才可以請求
                 .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                                        .csrfTokenRequestHandler(createCsrfCHandler())
+                                .csrfTokenRequestHandler(createCsrfCHandler())
 //                        公開的登入、註冊頁面忽略csrf防禦
-                                        .ignoringRequestMatchers("/users/login", "/users/register/*")
-                        )
+                                .ignoringRequestMatchers("/users/login", "/users/register/*")
+                                .ignoringRequestMatchers("/swagger-ui/**",
+                                        "/v3/api-docs/**")
+                )
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults())
                 .authorizeHttpRequests(request -> request
 //                        所有人都可以訪問登入、註冊頁面
                                 .requestMatchers("/users/login", "/users/register/*").permitAll()
+//                        所有人都可以訪問api頁面
+                                .requestMatchers("/swagger-ui/**",
+                                        "/v3/api-docs/**").permitAll()
 //                        房屋相關新增、修改、刪除等功能限制為房東權限
                                 .requestMatchers("/house/**").hasRole("LANDLORD")
 //                         房屋查詢功能限登入才可訪問
@@ -58,7 +63,7 @@ public class SecurityConfig {
 
                                 .requestMatchers("/users/**").hasRole("TENANT")
 //                        根據deny-by-default設計，避免意外暴露風險，所以預設未設定權限的頁面皆禁止訪問
-                                .anyRequest().permitAll()
+                                .anyRequest().denyAll()
                 )
                 .addFilterBefore(new SecurityFilter(), BasicAuthenticationFilter.class)
 //                cors跨域設定
