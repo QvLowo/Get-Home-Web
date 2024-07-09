@@ -14,12 +14,16 @@ public class RentInfoRowMapper implements RowMapper<RentInfo> {
         RentInfo rentInfo = new RentInfo();
       rentInfo.setRentInfoId(rs.getInt("rent_info_id"));
       rentInfo.setPaymentId(rs.getString("payment_id"));
+      rentInfo.setTransactionId(rs.getString("transaction_id"));
       rentInfo.setRentId(rs.getInt("rent_id"));
       rentInfo.setHouseId(rs.getInt("house_id"));
       rentInfo.setAmount(rs.getInt("amount"));
       rentInfo.setMonth(rs.getInt("month"));
       rentInfo.setCreateDate(rs.getDate("created_date"));
       rentInfo.setLastUpdateDate(rs.getDate("last_update_date"));
+
+      rentInfo.setHouseName(rs.getString("house_name"));
+      rentInfo.setImageUrl(rs.getString("image_url"));
         return rentInfo;
     }
 }

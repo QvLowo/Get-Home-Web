@@ -9,6 +9,7 @@ import java.util.Date;
 public class RentInfo {
     private Integer rentInfoId;
     private String paymentId;
+    private String transactionId;
     private Integer rentId;
     private Integer houseId;
     private Integer amount;
@@ -16,4 +17,6 @@ public class RentInfo {
     private Date createDate;
     private Date lastUpdateDate;
 
+    private String houseName;
+    private String imageUrl;
 }

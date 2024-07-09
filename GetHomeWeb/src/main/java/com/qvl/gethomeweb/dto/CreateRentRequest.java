@@ -17,6 +17,4 @@ public class CreateRentRequest {
     private LocalDate endDate;
 
 
-
-
 }

@@ -5,8 +5,8 @@ import lombok.Data;
 import java.math.BigDecimal;
 @Data
 public class ConfirmDataRequest {
-    private String paymentId;
     private String transactionId;
+    private String paymentId;
     private BigDecimal amount;
     private String currency;
 }
