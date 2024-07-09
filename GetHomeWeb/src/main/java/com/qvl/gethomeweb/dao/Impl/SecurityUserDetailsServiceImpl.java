@@ -1,10 +1,10 @@
-package com.qvl.gethomeweb.security;
+package com.qvl.gethomeweb.dao.Impl;
 
 import com.qvl.gethomeweb.dao.UserDao;
+import com.qvl.gethomeweb.model.MyUserDetails;
 import com.qvl.gethomeweb.model.Role;
-import com.qvl.gethomeweb.model.User;
+import com.qvl.gethomeweb.model.Member;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class SecurityUserDetailsService implements UserDetailsService {
+public class SecurityUserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     private UserDao userDao;
@@ -24,25 +24,23 @@ public class SecurityUserDetailsService implements UserDetailsService {
 //    根據使用者帳號查詢使用者詳細數據
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 //        從資料庫中根據使用者電話號碼查詢使用者數據
-        User user = userDao.getUserByPhone(username);
+        Member member = userDao.getUserByPhone(username);
 //        檢查使用者是否存在，存在的話取得登入用的電話及密碼
-        if (user == null) {
+        if (member == null) {
             throw new UsernameNotFoundException("使用者{}不存在" + username);
-        } else {
-            String userPhone = user.getPhone();
-            String userPassword = user.getPassword();
+        }
 
 //            權限相關設定
-            List<Role> roleList = userDao.getRolesByUserId(user.getUserId());
-            List<GrantedAuthority> authorities = convertToAuthorities(roleList);
+        List<Role> roleList = userDao.getRolesByUserId(member.getUserId());
+        List<SimpleGrantedAuthority> authorities = convertToAuthorities(roleList);
+        member.setRoles(roleList);
 //            轉換成 Spring Security 指定的 User 格式
-            return new org.springframework.security.core.userdetails.User(userPhone, userPassword, authorities);
+        return new MyUserDetails(member, authorities);
 
-        }
     }
 
-    private List<GrantedAuthority> convertToAuthorities(List<Role> roleList) {
-        List<GrantedAuthority> authorities = new ArrayList<>();
+    private List<SimpleGrantedAuthority> convertToAuthorities(List<Role> roleList) {
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
         for (Role role : roleList) {
             authorities.add(new SimpleGrantedAuthority(role.getRoleName().toString()));
@@ -51,4 +49,3 @@ public class SecurityUserDetailsService implements UserDetailsService {
         return authorities;
     }
 }
-

@@ -1,12 +1,15 @@
 package com.qvl.gethomeweb.constant;
 
 public enum RentStatus {
-//    看房中
+    /**
+     * 訂單狀態
+     * INPROGRESS: 退租待確認
+     * PENDING: 待付款
+     * COMPLETED: 已完成
+     * CANCELLED: 已退租
+     */
     INPROGRESS,
-//    待付款
     PENDING,
-//    已完成
     COMPLETED,
-//    取消
     CANCELLED
 }

@@ -5,13 +5,21 @@ import com.qvl.gethomeweb.dto.HouseQueryParams;
 import com.qvl.gethomeweb.dto.HouseRequest;
 import com.qvl.gethomeweb.model.House;
 import com.qvl.gethomeweb.service.HouseService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+import static com.qvl.gethomeweb.constant.HouseStatus.RENTED;
+import static com.qvl.gethomeweb.constant.HouseStatus.RESERVED;
+
 @Service
 public class HouseServiceImpl implements HouseService {
+    private final static Logger log = LoggerFactory.getLogger(RentServiceImpl.class);
     //注入HouseDao
     @Autowired
     private HouseDao houseDao;
@@ -30,8 +38,8 @@ public class HouseServiceImpl implements HouseService {
 
     //新增房屋資訊
     @Override
-    public Integer createHouse(HouseRequest houseRequest) {
-        return houseDao.createHouse(houseRequest);
+    public Integer createHouse(Integer userId, HouseRequest houseRequest) {
+        return houseDao.createHouse(userId, houseRequest);
     }
 
     //更新房屋資訊
@@ -43,6 +51,13 @@ public class HouseServiceImpl implements HouseService {
     //刪除房屋資訊
     @Override
     public void deleteHouseById(Integer houseId) {
+        House house = houseDao.getHouseById(houseId);
+        if(house != null) {
+            if (house.getStatus() == RESERVED || house.getStatus() == RENTED) {
+                log.warn("該房屋{}狀態為{}，無法刪除", houseId, house.getStatus());
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "該房屋已被預訂或出租，無法刪除");
+            }
+        }
         houseDao.deleteHouseById(houseId);
     }
 

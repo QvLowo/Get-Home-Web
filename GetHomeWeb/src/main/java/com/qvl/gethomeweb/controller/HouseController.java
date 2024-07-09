@@ -1,6 +1,5 @@
 package com.qvl.gethomeweb.controller;
 
-import com.qvl.gethomeweb.constant.Gender;
 import com.qvl.gethomeweb.constant.HouseStatus;
 import com.qvl.gethomeweb.constant.HouseType;
 import com.qvl.gethomeweb.dto.HouseQueryParams;
@@ -8,6 +7,9 @@ import com.qvl.gethomeweb.dto.HouseRequest;
 import com.qvl.gethomeweb.model.House;
 import com.qvl.gethomeweb.service.HouseService;
 import com.qvl.gethomeweb.util.Page;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -22,11 +24,12 @@ import java.util.List;
 
 @Validated
 @RestController
+@Tag(name = "房屋相關API")
 public class HouseController {
-    //注入HouseService
     @Autowired
     private HouseService houseService;
 
+    @Operation(summary = "透過houseId查詢房屋資訊")
     //取得一筆房屋資訊
     @GetMapping("/houses/{houseId}")
     public ResponseEntity<House> getHouse(@PathVariable Integer houseId) {
@@ -40,13 +43,14 @@ public class HouseController {
         }
     }
 
+    @Operation(summary = "查詢所有房屋資訊，有查詢條件、分頁、排序功能")
     //    查詢全部房子資訊．並加上選填的查詢條件
     @GetMapping("/houses")
     public ResponseEntity<Page<House>> getAllHouses(
 //            查詢條件
+            @Parameter(description = "房東id")@RequestParam (required = false)Integer userId,
             @RequestParam(required = false) HouseType houseType,
             @RequestParam(required = false) String search,
-            @RequestParam(required = false) Gender gender,
             @RequestParam(required = false) HouseStatus status,
 //            排序功能，預設根據創建時間降冪排序（新->舊）
             @RequestParam(defaultValue = "created_date") String orderBy,
@@ -60,9 +64,9 @@ public class HouseController {
 
 
         HouseQueryParams houseQueryParams = new HouseQueryParams();
+        houseQueryParams.setUserId(userId);
         houseQueryParams.setHouseType(houseType);
         houseQueryParams.setSearch(search);
-        houseQueryParams.setGender(gender);
         houseQueryParams.setStatus(status);
         houseQueryParams.setOrderBy(orderBy);
         houseQueryParams.setOrderType(orderType);
@@ -87,21 +91,25 @@ public class HouseController {
         return ResponseEntity.status(HttpStatus.OK).body(page);
     }
 
+
+
+    @Operation(summary = "新增房屋")
     //    限定只有房東才可以執行新增房屋的方法
     @PreAuthorize("hasRole('LANDLORD')")
     //新增房屋
-    @PostMapping("/houses/landlord/create")
-    public ResponseEntity<House> createHouse(@RequestBody @Valid HouseRequest houseRequest) {
-        Integer houseId = houseService.createHouse(houseRequest);
+    @PostMapping("/landlords/{userId}/house")
+    public ResponseEntity<House> createHouse(@PathVariable Integer userId, @RequestBody @Valid HouseRequest houseRequest) {
+        Integer houseId = houseService.createHouse(userId,houseRequest);
         House house = houseService.getHouseById(houseId);
         return ResponseEntity.status(HttpStatus.CREATED).body(house);
 
     }
 
+    @Operation(summary = "更新房屋資訊")
     //    限定只有房東才可以執行更新房屋資訊的方法
     @PreAuthorize("hasRole('LANDLORD')")
     //透過houseId更新房屋資訊
-    @PutMapping("/houses/landlord/update/{houseId}")
+    @PutMapping("/landlords/house/{houseId}")
     public ResponseEntity<House> updateHouse(@PathVariable Integer houseId, @RequestBody @Valid HouseRequest houseRequest) {
 
         House house = houseService.getHouseById(houseId);
@@ -115,10 +123,11 @@ public class HouseController {
         return ResponseEntity.status(HttpStatus.OK).body(updatedHouse);
     }
 
+    @Operation(summary = "刪除房屋")
     //    限定只有房東才可以執行刪除房屋的方法
     @PreAuthorize("hasRole('LANDLORD')")
     //透過houseId刪除房屋，刪除成功或房屋不存在都回傳204
-    @DeleteMapping("/houses/landlord/delete/{houseId}")
+    @DeleteMapping("/landlords/house/{houseId}")
     public ResponseEntity<House> deleteHouse(@PathVariable Integer houseId) {
         houseService.deleteHouseById(houseId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

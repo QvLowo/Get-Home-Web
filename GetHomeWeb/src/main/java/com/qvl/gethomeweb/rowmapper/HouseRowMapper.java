@@ -1,7 +1,6 @@
 package com.qvl.gethomeweb.rowmapper;
 
 
-import com.qvl.gethomeweb.constant.Gender;
 import com.qvl.gethomeweb.constant.HouseStatus;
 import com.qvl.gethomeweb.constant.HouseType;
 import com.qvl.gethomeweb.model.House;
@@ -15,14 +14,16 @@ public class HouseRowMapper implements RowMapper<House> {
     @Override
     public House mapRow(ResultSet rs, int rowNum) throws SQLException {
         House house = new House();
+        house.setUserId(rs.getInt("user_id"));
         house.setHouseId(rs.getInt("house_id"));
+        house.setHouseName(rs.getString("house_name"));
+        house.setUserId(rs.getInt("user_id"));
 //        string轉enum
         house.setHouseType(HouseType.valueOf(rs.getString("house_type")));
 
         house.setAddress(rs.getString("address"));
         house.setImageUrl(rs.getString("image_url"));
         house.setPricePerMonth(rs.getInt("price_per_month"));
-        house.setGender(Gender.valueOf(rs.getString("gender")));
         house.setStatus(HouseStatus.valueOf(rs.getString("status")));
 
         house.setDescription(rs.getString("description"));
