@@ -5,9 +5,10 @@ import com.qvl.gethomeweb.constant.Gender;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
-public class User {
+public class Member {
     private Integer userId;
     private String userName;
     private String phone;
@@ -18,4 +19,5 @@ public class User {
     private String email;
     private Date createdDate;
     private Date lastUpdateDate;
+    private List<Role> roles;
 }

@@ -3,7 +3,7 @@ package com.qvl.gethomeweb.dao.Impl;
 import com.qvl.gethomeweb.dao.UserDao;
 import com.qvl.gethomeweb.dto.UserRegisterRequest;
 import com.qvl.gethomeweb.model.Role;
-import com.qvl.gethomeweb.model.User;
+import com.qvl.gethomeweb.model.Member;
 import com.qvl.gethomeweb.rowmapper.UserRowMapper;
 import com.qvl.gethomeweb.rowmapper.RoleRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +24,11 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Integer createUser(UserRegisterRequest userRegisterRequest) {
-        String sql = "INSERT INTO user (phone,username, password,email) VALUES (:phone,:username,:password,:email)";
+        String sql = "INSERT INTO user (phone,username,gender, password,email) VALUES (:phone,:username,:gender,:password,:email)";
         Map<String, Object> map = new HashMap<>();
         map.put("username", userRegisterRequest.getUsername());
         map.put("phone", userRegisterRequest.getPhone());
+        map.put("gender", userRegisterRequest.getGender().toString());
         map.put("password", userRegisterRequest.getPassword());
         map.put("email", userRegisterRequest.getEmail());
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -37,30 +38,30 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User getUserById(Integer userId) {
-        String sql = "SELECT user_id,phone,username,password,email,created_date,last_update_date FROM user WHERE user_id = :userId";
+    public Member getUserById(Integer userId) {
+        String sql = "SELECT user_id,phone,username,password,email,gender,created_date,last_update_date FROM user WHERE user_id = :userId";
         Map<String, Object> map = new HashMap<>();
         map.put("userId", userId);
 
-        List<User> userList = namedParameterJdbcTemplate.query(sql, map, new UserRowMapper());
+        List<Member> memberList = namedParameterJdbcTemplate.query(sql, map, new UserRowMapper());
 
-        if (userList.size() > 0) {
-            return userList.get(0);
+        if (memberList.size() > 0) {
+            return memberList.get(0);
         } else {
             return null;
         }
     }
 
     @Override
-    public User getUserByPhone(String phone) {
-        String sql = "SELECT user_id,phone,username,password,email,created_date,last_update_date FROM user WHERE phone = :phone";
+    public Member getUserByPhone(String phone) {
+        String sql = "SELECT user_id,phone,username,password,email,gender,created_date,last_update_date FROM user WHERE phone = :phone";
         Map<String, Object> map = new HashMap<>();
         map.put("phone", phone);
 
-        List<User> userList = namedParameterJdbcTemplate.query(sql, map, new UserRowMapper());
+        List<Member> memberList = namedParameterJdbcTemplate.query(sql, map, new UserRowMapper());
 
-        if (userList.size() > 0) {
-            return userList.get(0);
+        if (memberList.size() > 0) {
+            return memberList.get(0);
         } else {
             return null;
         }
