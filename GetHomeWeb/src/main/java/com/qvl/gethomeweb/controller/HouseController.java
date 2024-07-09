@@ -8,6 +8,7 @@ import com.qvl.gethomeweb.model.House;
 import com.qvl.gethomeweb.service.HouseService;
 import com.qvl.gethomeweb.util.Page;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
@@ -23,9 +24,8 @@ import java.util.List;
 
 @Validated
 @RestController
-@Tag(name = "房屋API")
+@Tag(name = "房屋相關API")
 public class HouseController {
-    //注入HouseService
     @Autowired
     private HouseService houseService;
 
@@ -48,6 +48,7 @@ public class HouseController {
     @GetMapping("/houses")
     public ResponseEntity<Page<House>> getAllHouses(
 //            查詢條件
+            @Parameter(description = "房東id")@RequestParam (required = false)Integer userId,
             @RequestParam(required = false) HouseType houseType,
             @RequestParam(required = false) String search,
             @RequestParam(required = false) HouseStatus status,
@@ -63,6 +64,7 @@ public class HouseController {
 
 
         HouseQueryParams houseQueryParams = new HouseQueryParams();
+        houseQueryParams.setUserId(userId);
         houseQueryParams.setHouseType(houseType);
         houseQueryParams.setSearch(search);
         houseQueryParams.setStatus(status);
@@ -89,13 +91,15 @@ public class HouseController {
         return ResponseEntity.status(HttpStatus.OK).body(page);
     }
 
+
+
     @Operation(summary = "新增房屋")
     //    限定只有房東才可以執行新增房屋的方法
     @PreAuthorize("hasRole('LANDLORD')")
     //新增房屋
-    @PostMapping("/house")
-    public ResponseEntity<House> createHouse(@RequestBody @Valid HouseRequest houseRequest) {
-        Integer houseId = houseService.createHouse(houseRequest);
+    @PostMapping("/landlords/{userId}/house")
+    public ResponseEntity<House> createHouse(@PathVariable Integer userId, @RequestBody @Valid HouseRequest houseRequest) {
+        Integer houseId = houseService.createHouse(userId,houseRequest);
         House house = houseService.getHouseById(houseId);
         return ResponseEntity.status(HttpStatus.CREATED).body(house);
 
@@ -105,7 +109,7 @@ public class HouseController {
     //    限定只有房東才可以執行更新房屋資訊的方法
     @PreAuthorize("hasRole('LANDLORD')")
     //透過houseId更新房屋資訊
-    @PutMapping("/house/{houseId}")
+    @PutMapping("/landlords/house/{houseId}")
     public ResponseEntity<House> updateHouse(@PathVariable Integer houseId, @RequestBody @Valid HouseRequest houseRequest) {
 
         House house = houseService.getHouseById(houseId);
@@ -123,7 +127,7 @@ public class HouseController {
     //    限定只有房東才可以執行刪除房屋的方法
     @PreAuthorize("hasRole('LANDLORD')")
     //透過houseId刪除房屋，刪除成功或房屋不存在都回傳204
-    @DeleteMapping("/house/{houseId}")
+    @DeleteMapping("/landlords/house/{houseId}")
     public ResponseEntity<House> deleteHouse(@PathVariable Integer houseId) {
         houseService.deleteHouseById(houseId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

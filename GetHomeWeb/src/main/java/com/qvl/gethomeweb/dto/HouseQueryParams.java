@@ -6,6 +6,8 @@ import lombok.Data;
 
 @Data
 public class HouseQueryParams {
+    private Integer userId;
+    private String houseName;
     private HouseType houseType;
     private String search;
     private HouseStatus status;

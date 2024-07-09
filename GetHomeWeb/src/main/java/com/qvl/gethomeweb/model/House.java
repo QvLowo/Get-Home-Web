@@ -5,11 +5,14 @@ import com.qvl.gethomeweb.constant.HouseType;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
 public class House {
     private Integer houseId;
+    private Integer userId;
+    private String houseName;
     private HouseType houseType;
     private String address;
     private String imageUrl;
@@ -19,3 +22,4 @@ public class House {
     private Date createdDate;
     private Date lastUpdateDate;
 }
+

@@ -14,7 +14,10 @@ public class HouseRowMapper implements RowMapper<House> {
     @Override
     public House mapRow(ResultSet rs, int rowNum) throws SQLException {
         House house = new House();
+        house.setUserId(rs.getInt("user_id"));
         house.setHouseId(rs.getInt("house_id"));
+        house.setHouseName(rs.getString("house_name"));
+        house.setUserId(rs.getInt("user_id"));
 //        string轉enum
         house.setHouseType(HouseType.valueOf(rs.getString("house_type")));
 

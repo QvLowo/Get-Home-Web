@@ -14,7 +14,7 @@ public interface HouseService {
     List<House> getAllHouses(HouseQueryParams houseQueryParams);
 
     //新增房屋資訊
-    Integer createHouse(HouseRequest houseRequest);
+    Integer createHouse(Integer userId, HouseRequest houseRequest);
 
     //更新房屋資訊
     void updateHouse(Integer houseId, HouseRequest houseRequest);
