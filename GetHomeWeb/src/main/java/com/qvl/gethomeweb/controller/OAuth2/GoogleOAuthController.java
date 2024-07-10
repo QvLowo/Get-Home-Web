@@ -25,9 +25,9 @@ import java.util.List;
 public class GoogleOAuthController {
 
     //google 相關參數
-    private String GOOGLE_CLIENT_ID = "1097473385467-8e8bkq322v2it0nltgs347pc4m6tnmct.apps.googleusercontent.com";
+    private String GOOGLE_CLIENT_ID = "your client id";
 
-    private String GOOGLE_CLIENT_SECRET = "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";
+    private String GOOGLE_CLIENT_SECRET = "your client secret";
 
     private String GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
 
