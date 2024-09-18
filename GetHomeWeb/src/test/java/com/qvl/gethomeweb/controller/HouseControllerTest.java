@@ -242,6 +242,7 @@ public class HouseControllerTest {
     }
 
     @Test
+//    查詢房屋排序功能
     public void getHouses_sorting() throws Exception {
         RequestBuilder requestBuilder = get("/houses")
                 .param("orderBy", "price_per_month")
@@ -263,6 +264,7 @@ public class HouseControllerTest {
 
     @Transactional
     @Test
+//    查詢房屋分頁功能
     public void getHouses_pagination() throws Exception {
         RequestBuilder requestBuilder = get("/houses")
                 .param("limit", "3")
