@@ -35,6 +35,7 @@ import static com.qvl.gethomeweb.constant.RentStatus.COMPLETED;
 public class PaymentServiceImpl implements PaymentService {
     private String LINE_PAY_CHANNEL_ID = "your_channel_id";
     private String LINE_PAY_CHANNEL_SECRET = "your_channel_secret";
+
     private String LINE_PAY_REQUEST_URI = "/v3/payments/request";
     private String LINE_PAY_REQUEST_URL = "https://sandbox-api-pay.line.me/v3/payments/request";
     private String LINE_PAY_URL = "https://sandbox-api-pay.line.me/";

@@ -29,6 +29,7 @@ public class GoogleOAuthController {
 
     private String GOOGLE_CLIENT_SECRET = "your_client_secret";
 
+
     private String GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
 
     private String GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
